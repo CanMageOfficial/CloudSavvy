@@ -1,0 +1,6 @@
+rootProject.name = 'CloudSavvy'
+//include('CloudSaverAws')
+// includeFlat("CloudSaverAws")
+//include 'src:test:java'
+//findProject(':src:test:java')?.name = 'java'
+

@@ -1,0 +1,139 @@
+plugins {
+    id 'application'
+   // id "nebula.lint" version "17.7.0"
+}
+
+group 'com.cloudSavvy'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'com.cloudSavvy.Executor'
+}
+
+dependencies {
+    implementation platform('software.amazon.awssdk:bom:2.25.36')
+    implementation 'software.amazon.awssdk:apigateway:2.25.36'
+    implementation 'software.amazon.awssdk:apigatewayv2'
+    implementation 'software.amazon.awssdk:applicationautoscaling'
+    implementation 'software.amazon.awssdk:appstream'
+    implementation 'software.amazon.awssdk:auth'
+    implementation 'software.amazon.awssdk:aws-core'
+    implementation 'software.amazon.awssdk:cloudsearch'
+    implementation 'software.amazon.awssdk:cloudfront'
+    implementation 'software.amazon.awssdk:cloudwatch'
+    implementation 'software.amazon.awssdk:cloudwatchlogs'
+    implementation 'software.amazon.awssdk:dynamodb'
+    implementation 'software.amazon.awssdk:ec2'
+    implementation 'software.amazon.awssdk:ecs'
+    implementation 'software.amazon.awssdk:efs'
+    implementation 'software.amazon.awssdk:eks'
+    implementation 'software.amazon.awssdk:elasticache'
+    implementation 'software.amazon.awssdk:elasticloadbalancing'
+    implementation 'software.amazon.awssdk:elasticloadbalancingv2'
+    implementation 'software.amazon.awssdk:eventbridge'
+    implementation 'software.amazon.awssdk:fsx'
+    implementation 'software.amazon.awssdk:glue'
+    implementation 'software.amazon.awssdk:kinesis'
+    implementation 'software.amazon.awssdk:kinesisanalyticsv2'
+    implementation 'software.amazon.awssdk:lambda'
+    implementation 'software.amazon.awssdk:lightsail'
+    implementation 'software.amazon.awssdk:memorydb'
+    implementation 'software.amazon.awssdk:rds'
+    implementation 'software.amazon.awssdk:redshift'
+    implementation 'software.amazon.awssdk:redshiftserverless'
+    implementation 'software.amazon.awssdk:regions'
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:sagemaker'
+    implementation 'software.amazon.awssdk:sdk-core'
+    implementation 'software.amazon.awssdk:secretsmanager'
+    implementation 'software.amazon.awssdk:sesv2'
+    implementation 'software.amazon.awssdk:sns'
+    implementation 'software.amazon.awssdk:sts'
+    implementation 'software.amazon.awssdk:transfer'
+    implementation 'software.amazon.awssdk:utils'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+
+    // Caching
+    implementation 'com.google.guava:guava:33.1.0-jre'
+
+    // dagger
+    implementation 'com.google.dagger:dagger:2.51.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.51.1'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    // logging
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j18-impl:2.18.0'
+    implementation 'com.amazonaws:aws-lambda-java-log4j2:1.6.0'
+
+    // command line parser
+    implementation 'commons-cli:commons-cli:1.7.0'
+
+    // json
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+
+    // obfuscation
+    compileOnly 'com.yworks:yguard:4.0.0'
+    compileOnly 'com.yworks:annotation:4.0.0'
+
+    //dependency analysis
+    compileOnly 'com.netflix.nebula:gradle-lint-plugin:18.0.3'
+
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.jsoup:jsoup:1.15.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+allprojects {
+    apply plugin :"java"
+    /*apply plugin :"nebula.lint"
+    gradleLint {
+        rules=['dependency-parentheses', 'dependency-tuple', 'recommended-versions']
+    }*/
+}
+
+test {
+    useJUnitPlatform()
+}
+
+def obfuscate = tasks.register('obfuscate') {
+    dependsOn jar
+    group 'yGuard'
+    description 'Obfuscates and shrinks the java archive.'
+
+    doLast {
+        ant.taskdef(
+                name: 'yguard',
+                classname: 'com.yworks.yguard.YGuardTask',
+                classpath: sourceSets.main.compileClasspath.asPath
+        )
+
+        def archivePath = jar.archiveFile.get().asFile.path
+        ant.yguard {
+            inoutpair(in: archivePath, out: archivePath.replace(".jar", ".jar"))
+            rename(logfile: "${buildDir}/yguard.log.xml") {
+                property(name: "error-checking", value: "pedantic")
+            }
+        }
+    }
+}
+
+task buildZip(type: Zip) {
+    //dependsOn obfuscate
+    from processResources
+    into('lib') {
+        from jar
+        from configurations.runtimeClasspath
+    }
+}

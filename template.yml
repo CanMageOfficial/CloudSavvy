@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: CloudSavvy application detects cost saving opportunities in your AWS account and reports them
+
+Parameters:
+  EmailAddress:
+    Type: String
+    Description: Email address will be used to send daily report.
+    AllowedPattern: "([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)"
+    ConstraintDescription: "must be a valid email address."
+  LambdaBucket:
+    Type: String
+    Description: S3 bucket where lambda zip file is stored.
+
+Resources:
+  # S3 bucket will be used to store reports
+  CloudSavvyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "cloudsavvy-${AWS::AccountId}-${AWS::Region}"
+      LifecycleConfiguration:
+        Rules:
+          - Id: Rule for reports
+            Status: Enabled
+            ExpirationInDays: 60
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  CloudSavvyNotificationTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName : "CloudSavvyNotificationTopic"
+
+  # Lambda function
+  CloudSavvyExecutorFunction:
+    Name: CloudSavvyExecutorFunction
+    Type: AWS::Serverless::Function
+    DependsOn:
+      - "CloudSavvyS3Bucket"
+    Properties:
+      # Commented out code is for manually uploading zip file to S3 bucket
+      # CodeUri:
+        # Bucket: !Ref LambdaBucket
+        # Key: CloudSavvy-1.0-SNAPSHOT.zip
+      CodeUri: build/distributions/CloudSavvy-1.0-SNAPSHOT.zip
+      Handler: com.cloudSavvy.execution.LambdaExecutor::handleRequest
+      Runtime: java11
+      Description: Lambda function which runs daily to analyze all regions for cost saving opportunities
+      MemorySize: 2048
+      Timeout: 900
+      Architectures:
+        - arm64
+      Environment:
+        Variables:
+          RESULTS_BUCKET:
+            Ref: "CloudSavvyS3Bucket"
+          FROM_EMAIL_ADDRESS: !Ref EmailAddress
+          TO_EMAIL_ADDRESSES: !Ref EmailAddress
+          RUNNING_AWS_ACCOUNT_ID: !Ref AWS::AccountId
+          STACK_NAME: !Ref AWS::StackName
+          NOTIFICATION_TOPIC_ARN: !Ref CloudSavvyNotificationTopic
+      Role:
+        Fn::GetAtt: [ CloudSavvyExecutorFunctionRole, Arn ]
+      Tracing: Active
+      FunctionName: CloudSavvyExecutorFunction
+
+  # Role to execute the Lambda function
+  CloudSavvyExecutorFunctionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      MaxSessionDuration: 43200
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        - "arn:aws:iam::aws:policy/ReadOnlyAccess"
+      Policies:
+        - PolicyName: CloudSavvyExecutorFunctionRolePolicy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - redshift-serverless:ListWorkgroups
+                Resource: '*'
+              - Effect: Allow
+                Action: "s3:*"
+                Resource:
+                  - Fn::Join: [ '/',[ Fn::GetAtt: [ "CloudSavvyS3Bucket", "Arn" ], "*" ] ]
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendRawEmail
+                Resource:
+                  !Join
+                  - ''
+                  - - "arn:aws:ses:"
+                    - !Ref AWS::Region
+                    - ":"
+                    - !Ref AWS::AccountId
+                    - ":identity/*"
+              - Effect: Allow
+                Action: 'sns:Publish'
+                Resource: !Ref CloudSavvyNotificationTopic
+              - Effect: Allow
+                Action:
+                  - memorydb:DescribeClusters
+                Resource: '*'
+
+  # Notification email SES identity
+  NotificationEmail:
+    Type: AWS::SES::EmailIdentity
+    Properties:
+      EmailIdentity: !Ref EmailAddress
+
+  # Run lambda function daily EventBridge rule
+  CloudSavvyExecutorFunctionScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Scheduled Rule
+      # Runs every day at 11 PM
+      ScheduleExpression: cron(0 23 ? * * *)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CloudSavvyExecutorFunction.Arn
+          Id: TargetFunctionV1
+
+  # Grant permission to EventBridge rule to trigger Lambda
+  PermissionForEventsToInvokeCloudSavvyExecutorFunction:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref CloudSavvyExecutorFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudSavvyExecutorFunctionScheduledRule.Arn
+
+  # Lambda function logs will be deleted within 60 days
+  CloudSavvyExecutorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CloudSavvyExecutorFunction}"
+      RetentionInDays: 60
+
+Outputs:
+  CloudSavvyReportBucket:
+    Value: !Ref CloudSavvyS3Bucket
+    Description: Bucket where reports will be stored.

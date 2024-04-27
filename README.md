@@ -6,6 +6,7 @@
     * [Running From Command line With AWS Profile](#running-from-command-line-with-aws-profile)
   * [Deploying to AWS](#deploying-to-aws)
     * [Deploying to Personal AWS Account](#deploying-to-personal-aws-account)
+  * [Sample Report](#sample-report)
   * [Development](#development)
     * [Setting Up Development Environment](#setting-up-development-environment)
     * [Debugging Arguments For Development](#debugging-arguments-for-development)
@@ -46,6 +47,10 @@ AWS_PROFILE=`Profile Name` ./gradlew run
 
 CloudSavvyExecutorFunction lambda function will be deployed to your default region
 CloudSavvyExecutorFunction will be scheduled to run daily
+
+## Sample Report
+
+![alt text](https://raw.githubusercontent.com/CanMageOfficial/CloudSavvy/main/Samples/Sample_Report_1.png)
 
 ## Development
 

@@ -40,9 +40,11 @@ AWS_PROFILE=`Profile Name` ./gradlew run
 ### Deploying to Personal AWS Account
 1. Install AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 2. Setup AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html
-3. Run 1-create-bucket.sh script
+3. Set region - optional
+   `export AWS_REGION=us-east-1`
+4. Run 1-create-bucket.sh script
    `bash 1-create-bucket.sh`
-4. Run 2-deploy.sh script
+5. Run 2-deploy.sh script
    `bash 2-deploy.sh`
 
 CloudSavvyExecutorFunction lambda function will be deployed to your default region

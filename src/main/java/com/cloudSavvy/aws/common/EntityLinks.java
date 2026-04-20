@@ -55,6 +55,14 @@ public class EntityLinks {
             .put(EntityType.APIGateway_METHOD, "https://%1$s.console.aws.amazon.com/apigateway/home?region=%1$s#/apis/%2$s")
             .put(EntityType.MEMORY_DB_CLUSTER, "https://%1$s.console.aws.amazon.com/memorydb/home?region=%1$s#/clusters/%2$s")
             .put(EntityType.BILLING, "https://%1$s.console.aws.amazon.com/billing/home?region=%1$s#/bills")
+            .put(EntityType.SNS_TOPIC, "https://%1$s.console.aws.amazon.com/sns/v3/home?region=%1$s#/topic/%2$s")
+            .put(EntityType.SQS_QUEUE, "https://%1$s.console.aws.amazon.com/sqs/v3/home?region=%1$s#/queues")
+            .put(EntityType.ECR_REPOSITORY, "https://%1$s.console.aws.amazon.com/ecr/repositories?region=%1$s")
+            .put(EntityType.CLOUDFORMATION_STACK, "https://%1$s.console.aws.amazon.com/cloudformation/home?region=%1$s#/stacks?filteringText=%2$s")
+            .put(EntityType.ACM_CERTIFICATE, "https://%1$s.console.aws.amazon.com/acm/home?region=%1$s#/certificates/list")
+            .put(EntityType.STEP_FUNCTIONS_STATE_MACHINE, "https://%1$s.console.aws.amazon.com/states/home?region=%1$s#/statemachines")
+            .put(EntityType.SAGEMAKER_STUDIO_APP, "https://%1$s.console.aws.amazon.com/sagemaker/home?region=%1$s#/studio")
+            .put(EntityType.BEDROCK_PROVISIONED_THROUGHPUT, "https://%1$s.console.aws.amazon.com/bedrock/home?region=%1$s#/provisioned-throughput")
             .build();
 
     public static final ImmutableMap<EntityType, String> SERVICE_LINK_TEMPLATES = ImmutableMap.<EntityType, String>builder()
@@ -103,6 +111,14 @@ public class EntityLinks {
             .put(EntityType.APIGateway_METHOD, "https://%1$s.console.aws.amazon.com/apigateway/main/apis?region=%1$s")
             .put(EntityType.MEMORY_DB_CLUSTER, "https://%1$s.console.aws.amazon.com/memorydb/home?region=%1$s#/clusters")
             .put(EntityType.BILLING, "https://%1$s.console.aws.amazon.com/billing/home?region=%1$s#/bills")
+            .put(EntityType.SNS_TOPIC, "https://%1$s.console.aws.amazon.com/sns/v3/home?region=%1$s#/topics")
+            .put(EntityType.SQS_QUEUE, "https://%1$s.console.aws.amazon.com/sqs/v3/home?region=%1$s#/queues")
+            .put(EntityType.ECR_REPOSITORY, "https://%1$s.console.aws.amazon.com/ecr/repositories?region=%1$s")
+            .put(EntityType.CLOUDFORMATION_STACK, "https://%1$s.console.aws.amazon.com/cloudformation/home?region=%1$s#/stacks")
+            .put(EntityType.ACM_CERTIFICATE, "https://%1$s.console.aws.amazon.com/acm/home?region=%1$s#/certificates/list")
+            .put(EntityType.STEP_FUNCTIONS_STATE_MACHINE, "https://%1$s.console.aws.amazon.com/states/home?region=%1$s#/statemachines")
+            .put(EntityType.SAGEMAKER_STUDIO_APP, "https://%1$s.console.aws.amazon.com/sagemaker/home?region=%1$s#/studio")
+            .put(EntityType.BEDROCK_PROVISIONED_THROUGHPUT, "https://%1$s.console.aws.amazon.com/bedrock/home?region=%1$s#/provisioned-throughput")
             .build();
 
     private static final String BUCKET_OBJECT_PREFIX_TEMPLATE = "https://s3.console.aws.amazon.com/s3/object/%s?region=%s&prefix=%s";

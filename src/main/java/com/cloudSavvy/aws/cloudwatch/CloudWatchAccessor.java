@@ -110,6 +110,10 @@ public class CloudWatchAccessor {
         return getMetricData(AWSMetric.STEP_FUNCTIONS_EXECUTIONS_FAILED, stateMachineArns, null);
     }
 
+    public Map<String, MetricDataResult> getBedrockInvocationsMetricData(List<String> modelIds) {
+        return getMetricData(AWSMetric.BEDROCK_INVOCATIONS, modelIds, null);
+    }
+
     public Map<String, MetricDataResult> getElastiCacheClusterNewConnectionsMetricData(List<String> cacheClusterIds) {
         return getMetricData(AWSMetric.ELASTICACHE_CLUSTER_NEW_CONNECTIONS, cacheClusterIds, null);
     }

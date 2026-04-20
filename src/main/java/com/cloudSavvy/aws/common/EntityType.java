@@ -54,6 +54,8 @@ public enum EntityType {
     CLOUDFORMATION_STACK("CloudFormation Stack"),
     ACM_CERTIFICATE("ACM Certificate"),
     STEP_FUNCTIONS_STATE_MACHINE("Step Functions State Machine"),
+    SAGEMAKER_STUDIO_APP("SageMaker Studio App"),
+    BEDROCK_PROVISIONED_THROUGHPUT("Amazon Bedrock Provisioned Throughput"),
 
     BILLING("Billing");
 

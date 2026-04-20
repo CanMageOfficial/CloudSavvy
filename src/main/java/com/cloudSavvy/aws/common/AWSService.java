@@ -32,7 +32,8 @@ public enum AWSService {
     ECR("Amazon ECR"),
     CloudFormation("AWS CloudFormation"),
     ACM("AWS Certificate Manager"),
-    StepFunctions("AWS Step Functions");
+    StepFunctions("AWS Step Functions"),
+    Bedrock("Amazon Bedrock");
 
     private final String text;
 

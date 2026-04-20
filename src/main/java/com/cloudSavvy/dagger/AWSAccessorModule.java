@@ -32,6 +32,7 @@ import com.cloudSavvy.aws.efs.EFSAccessor;
 import com.cloudSavvy.aws.lightsail.LightsailAccessor;
 import com.cloudSavvy.aws.memorydb.MemoryDbAccessor;
 import com.cloudSavvy.aws.acm.AcmAccessor;
+import com.cloudSavvy.aws.bedrock.BedrockAccessor;
 import com.cloudSavvy.aws.cloudformation.CloudFormationAccessor;
 import com.cloudSavvy.aws.ecr.EcrAccessor;
 import com.cloudSavvy.aws.secretsmanager.SecretsManagerAccessor;
@@ -41,6 +42,7 @@ import com.cloudSavvy.aws.stepfunctions.StepFunctionsAccessor;
 import dagger.Module;
 import dagger.Provides;
 import software.amazon.awssdk.services.acm.AcmClient;
+import software.amazon.awssdk.services.bedrock.BedrockClient;
 import software.amazon.awssdk.services.apigateway.ApiGatewayClient;
 import software.amazon.awssdk.services.apigatewayv2.ApiGatewayV2Client;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
@@ -294,5 +296,11 @@ public class AWSAccessorModule {
     @Singleton
     public StepFunctionsAccessor provideStepFunctionsAccessor(final SfnClient sfnClient) {
         return new StepFunctionsAccessor(sfnClient);
+    }
+
+    @Provides
+    @Singleton
+    public BedrockAccessor provideBedrockAccessor(final BedrockClient bedrockClient) {
+        return new BedrockAccessor(bedrockClient);
     }
 }

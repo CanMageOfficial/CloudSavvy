@@ -64,6 +64,7 @@ import com.cloudSavvy.aws.s3.S3RuleManager;
 import com.cloudSavvy.aws.sagemaker.SageMakerAccessor;
 import com.cloudSavvy.aws.sagemaker.SageMakerEndpointRule;
 import com.cloudSavvy.aws.sagemaker.SageMakerInstanceRule;
+import com.cloudSavvy.aws.sagemaker.SageMakerStudioAppRule;
 import com.cloudSavvy.aws.transfer.AWSTransferAccessor;
 import com.cloudSavvy.aws.transfer.AWSTransferServerRule;
 import com.cloudSavvy.cache.GlobalCache;
@@ -89,6 +90,8 @@ import com.cloudSavvy.aws.memorydb.MemoryDbClusterRule;
 import com.cloudSavvy.aws.redshift.RedshiftRuleManager;
 import com.cloudSavvy.aws.acm.AcmAccessor;
 import com.cloudSavvy.aws.acm.AcmCertificateRule;
+import com.cloudSavvy.aws.bedrock.BedrockAccessor;
+import com.cloudSavvy.aws.bedrock.BedrockProvisionedThroughputRule;
 import com.cloudSavvy.aws.cloudformation.CloudFormationAccessor;
 import com.cloudSavvy.aws.cloudformation.CloudFormationStackRule;
 import com.cloudSavvy.aws.ecr.EcrAccessor;
@@ -147,6 +150,7 @@ public class AWSAnalyzerModule {
     private static final String CLOUDFORMATION_RULES = "CLOUDFORMATION_RULES";
     private static final String ACM_RULES = "ACM_RULES";
     private static final String STEP_FUNCTIONS_RULES = "STEP_FUNCTIONS_RULES";
+    private static final String BEDROCK_RULES = "BEDROCK_RULES";
 
     @Provides
     @Singleton
@@ -555,6 +559,7 @@ public class AWSAnalyzerModule {
         List<AnalyzerRule> rules = new ArrayList<>();
         rules.add(new SageMakerInstanceRule(sageMakerAccessor, logAccessor));
         rules.add(new SageMakerEndpointRule(sageMakerAccessor, logAccessor));
+        rules.add(new SageMakerStudioAppRule(sageMakerAccessor));
         return rules;
     }
 
@@ -788,6 +793,24 @@ public class AWSAnalyzerModule {
                                                                 final CloudWatchAccessor cloudWatchAccessor) {
         List<AnalyzerRule> rules = new ArrayList<>();
         rules.add(new StepFunctionsStateMachineRule(stepFunctionsAccessor, cloudWatchAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideBedrockAnalyzer(final @Named(BEDROCK_RULES) List<AnalyzerRule> rules,
+                                              final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.Bedrock);
+    }
+
+    @Provides
+    @Singleton
+    @Named(BEDROCK_RULES)
+    public List<AnalyzerRule> provideBedrockAnalyzerRules(final BedrockAccessor bedrockAccessor,
+                                                          final CloudWatchAccessor cloudWatchAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new BedrockProvisionedThroughputRule(bedrockAccessor, cloudWatchAccessor));
         return rules;
     }
 }

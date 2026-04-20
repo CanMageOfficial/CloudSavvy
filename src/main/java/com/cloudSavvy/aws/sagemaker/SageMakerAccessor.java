@@ -3,10 +3,14 @@ package com.cloudSavvy.aws.sagemaker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.sagemaker.SageMakerClient;
+import software.amazon.awssdk.services.sagemaker.model.AppDetails;
+import software.amazon.awssdk.services.sagemaker.model.AppStatus;
+import software.amazon.awssdk.services.sagemaker.model.ListAppsRequest;
 import software.amazon.awssdk.services.sagemaker.model.EndpointStatus;
 import software.amazon.awssdk.services.sagemaker.model.EndpointSummary;
 import software.amazon.awssdk.services.sagemaker.model.NotebookInstanceStatus;
 import software.amazon.awssdk.services.sagemaker.model.NotebookInstanceSummary;
+import software.amazon.awssdk.services.sagemaker.paginators.ListAppsIterable;
 import software.amazon.awssdk.services.sagemaker.paginators.ListEndpointsIterable;
 import software.amazon.awssdk.services.sagemaker.paginators.ListNotebookInstancesIterable;
 
@@ -30,6 +34,17 @@ public class SageMakerAccessor {
             }
         }
         return instances;
+    }
+
+    public List<AppDetails> listInServiceStudioApps() {
+        ListAppsIterable iterable = sageMakerClient.listAppsPaginator(ListAppsRequest.builder().build());
+        List<AppDetails> apps = new ArrayList<>();
+        for (AppDetails app : iterable.apps()) {
+            if (app.status() == AppStatus.IN_SERVICE) {
+                apps.add(app);
+            }
+        }
+        return apps;
     }
 
     public List<EndpointSummary> listEndpoints() {

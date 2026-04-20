@@ -10,6 +10,7 @@ import com.cloudSavvy.common.AnalyzerRule;
 import com.cloudSavvy.common.IssueData;
 import com.cloudSavvy.common.ResourceMetadata;
 import com.cloudSavvy.common.ServiceData;
+import com.cloudSavvy.utils.CdkUtils;
 import com.cloudSavvy.utils.TimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +43,15 @@ public class EcrRepositoryRule implements AnalyzerRule {
             return ruleResult;
         }
 
-        ruleResult.addServiceData(new ServiceData(entityType, repositories.stream()
+        List<Repository> filteredRepositories = repositories.stream()
+                .filter(r -> !CdkUtils.isCdkAssetRepository(r.repositoryName()))
+                .collect(Collectors.toList());
+
+        ruleResult.addServiceData(new ServiceData(entityType, filteredRepositories.stream()
                 .map(r -> new ResourceMetadata(r.repositoryName(), r.createdAt()))
                 .collect(Collectors.toList())));
 
-        for (Repository repo : repositories) {
+        for (Repository repo : filteredRepositories) {
             if (TimeUtils.getElapsedTimeInDays(repo.createdAt()) < ResourceAge.THIRTY_DAYS) {
                 continue;
             }

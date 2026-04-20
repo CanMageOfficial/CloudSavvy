@@ -37,6 +37,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sagemaker.SageMakerAsyncClient;
 import software.amazon.awssdk.services.sagemaker.SageMakerClient;
 import software.amazon.awssdk.services.acm.AcmClient;
+import software.amazon.awssdk.services.bedrock.BedrockClient;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.ecr.EcrClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
@@ -425,6 +426,16 @@ public class AWSClientModule {
     public SfnClient provideSfnClient(final AwsCredentialsProvider credentialsProvider,
                                       final Region region) {
         return SfnClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public BedrockClient provideBedrockClient(final AwsCredentialsProvider credentialsProvider,
+                                              final Region region) {
+        return BedrockClient.builder()
                 .credentialsProvider(credentialsProvider)
                 .region(region)
                 .build();

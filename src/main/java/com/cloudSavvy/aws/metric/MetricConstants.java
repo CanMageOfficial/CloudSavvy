@@ -71,6 +71,8 @@ public class MetricConstants {
     public static final String NUMBER_OF_MESSAGES_SENT = "NumberOfMessagesSent";
     public static final String STEP_FUNCTIONS_NAMESPACE = "AWS/States";
     public static final String EXECUTIONS_FAILED = "ExecutionsFailed";
+    public static final String BEDROCK_NAMESPACE = "AWS/Bedrock";
+    public static final String BEDROCK_INVOCATIONS = "Invocations";
 
     public static final ImmutableMap<AWSMetric, MetricTrait> AWSMetricTraits = ImmutableMap.<AWSMetric, MetricTrait>builder()
             .put(AWSMetric.LAMBDA_INVOCATIONS, MetricTrait.builder()
@@ -217,6 +219,11 @@ public class MetricConstants {
                     .namespace(STEP_FUNCTIONS_NAMESPACE)
                     .metricName(EXECUTIONS_FAILED)
                     .dimensionName("StateMachineArn")
+                    .unit(StandardUnit.COUNT).statistic(Statistic.SUM).build())
+            .put(AWSMetric.BEDROCK_INVOCATIONS, MetricTrait.builder()
+                    .namespace(BEDROCK_NAMESPACE)
+                    .metricName(BEDROCK_INVOCATIONS)
+                    .dimensionName("ModelId")
                     .unit(StandardUnit.COUNT).statistic(Statistic.SUM).build())
             .build();
 }

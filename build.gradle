@@ -52,6 +52,7 @@ dependencies {
     implementation 'software.amazon.awssdk:secretsmanager'
     implementation 'software.amazon.awssdk:sesv2'
     implementation 'software.amazon.awssdk:acm'
+    implementation 'software.amazon.awssdk:bedrock'
     implementation 'software.amazon.awssdk:cloudformation'
     implementation 'software.amazon.awssdk:ecr'
     implementation 'software.amazon.awssdk:sfn'

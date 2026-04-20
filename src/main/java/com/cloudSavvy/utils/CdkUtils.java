@@ -20,4 +20,9 @@ public class CdkUtils {
         }
         return false;
     }
+
+    // CDK bootstrap creates repos like: cdk-hnb659fds-container-assets-<accountId>-<region>
+    public static boolean isCdkAssetRepository(String repositoryName) {
+        return repositoryName.startsWith("cdk-") && repositoryName.contains("-container-assets-");
+    }
 }

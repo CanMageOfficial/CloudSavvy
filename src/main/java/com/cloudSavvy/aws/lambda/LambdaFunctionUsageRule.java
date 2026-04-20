@@ -5,6 +5,7 @@ import com.cloudSavvy.aws.rule.RuleResult;
 import com.cloudSavvy.common.AnalyzerRule;
 import com.cloudSavvy.common.IssueData;
 import com.cloudSavvy.common.ServiceData;
+import com.cloudSavvy.utils.CdkUtils;
 import com.cloudSavvy.utils.TimeUtils;
 import com.cloudSavvy.aws.common.AWSService;
 import com.cloudSavvy.aws.common.EntityType;
@@ -66,6 +67,10 @@ public class LambdaFunctionUsageRule implements AnalyzerRule {
         if (CollectionUtils.isNullOrEmpty(functions)) {
             return ruleResult;
         }
+
+        functions = functions.stream()
+                .filter(f -> !CdkUtils.isCdkInternalLambda(f.functionName()))
+                .collect(Collectors.toList());
 
         List<String> provisionedFunctions = Collections.synchronizedList(new ArrayList<>());
         functions.parallelStream().forEach(functionConfig -> {

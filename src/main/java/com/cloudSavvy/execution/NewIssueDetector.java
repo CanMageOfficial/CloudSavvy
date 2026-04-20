@@ -6,7 +6,7 @@ import com.cloudSavvy.common.internal.ExecutionInternalData;
 import com.cloudSavvy.common.RegionAnalyzeResult;
 import com.cloudSavvy.reporting.ReportType;
 import com.cloudSavvy.utils.EnvironmentUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.utils.CollectionUtils;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -56,7 +55,7 @@ public class NewIssueDetector {
             if (Files.exists(internalDataPath)) {
                 try {
                     internalData = objectMapper.readValue(internalDataPath.toFile(), ExecutionInternalData.class);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     log.error("Could not read internal data file CloudSavvyData", e);
                 }
             }

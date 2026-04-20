@@ -1,5 +1,6 @@
 package com.cloudSavvy.execution;
 
+import com.cloudSavvy.aws.common.ServiceAvailability;
 import lombok.AllArgsConstructor;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -14,6 +15,9 @@ public class RegionDiscovery {
 
     public List<Region> getRegions() {
         DescribeRegionsResponse regionsResponse = ec2Client.describeRegions();
-        return regionsResponse.regions().stream().map(region -> Region.of(region.regionName())).collect(Collectors.toList());
+        return regionsResponse.regions().stream()
+                .map(region -> Region.of(region.regionName()))
+                .filter(region -> !ServiceAvailability.DISABLED_REGIONS.contains(region))
+                .collect(Collectors.toList());
     }
 }

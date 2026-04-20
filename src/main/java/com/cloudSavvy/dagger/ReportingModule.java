@@ -20,7 +20,7 @@ import com.cloudSavvy.reporting.processor.SNSReportProcessor;
 import com.cloudSavvy.utils.EnvironmentUtils;
 import com.cloudSavvy.utils.RegionUtils;
 import com.cloudSavvy.utils.S3UrlBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoSet;

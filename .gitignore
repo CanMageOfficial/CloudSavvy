@@ -7,3 +7,4 @@
 /bucket-name.txt
 /*.csv
 /Results/*
+/.claude/settings.local.json

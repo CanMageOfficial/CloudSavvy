@@ -47,7 +47,7 @@ Resources:
         # Key: CloudSavvy-1.0-SNAPSHOT.zip
       CodeUri: build/distributions/CloudSavvy-1.0-SNAPSHOT.zip
       Handler: com.cloudSavvy.execution.LambdaExecutor::handleRequest
-      Runtime: java11
+      Runtime: java21
       Description: Lambda function which runs daily to analyze all regions for cost saving opportunities
       MemorySize: 2048
       Timeout: 900

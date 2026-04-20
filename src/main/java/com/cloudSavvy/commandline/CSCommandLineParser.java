@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -26,13 +26,11 @@ public class CSCommandLineParser {
                 .hasArg()
                 .required(false)
                 .desc(desc)
-                .build();
+                .get();
         options.addOption(regionOption);
 
         CommandLine cmd;
         CommandLineParser parser = new DefaultParser();
-        HelpFormatter helper = new HelpFormatter();
-
         try {
             cmd = parser.parse(options, args);
             if (cmd.hasOption(REGION_OPTION)) {
@@ -41,7 +39,10 @@ public class CSCommandLineParser {
             }
         } catch (ParseException e) {
             log.debug("Parsing command line failed.", e);
-            helper.printHelp("Usage:", options);
+            try {
+                HelpFormatter.builder().get().printHelp("Usage:", "", options, "", false);
+            } catch (java.io.IOException ignored) {
+            }
             System.exit(0);
         }
         return builder.build();

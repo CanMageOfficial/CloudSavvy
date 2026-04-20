@@ -73,7 +73,6 @@ import com.cloudSavvy.common.run.RunMetadata;
 import com.cloudSavvy.common.run.RunStatistics;
 import com.cloudSavvy.execution.AWSAnalyzer;
 import com.cloudSavvy.aws.apigateway.ApiGatewayAccessor;
-import com.cloudSavvy.aws.apigateway.ApiGatewayAuthRule;
 import com.cloudSavvy.aws.apigateway.ApiGatewayV2AuthRule;
 import com.cloudSavvy.aws.common.AWSService;
 import com.cloudSavvy.aws.ecs.ECSServiceRule;
@@ -649,7 +648,6 @@ public class AWSAnalyzerModule {
     public List<AnalyzerRule> provideApiGatewayAnalyzerRules(final ApiGatewayAccessor apiGatewayAccessor) {
         List<AnalyzerRule> rules = new ArrayList<>();
         rules.add(new ApiGatewayV2AuthRule());
-        rules.add(new ApiGatewayAuthRule(apiGatewayAccessor));
         return rules;
     }
 

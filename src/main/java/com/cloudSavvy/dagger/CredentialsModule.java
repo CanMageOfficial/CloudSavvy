@@ -12,6 +12,6 @@ public class CredentialsModule {
     @Provides
     @Singleton
     public AwsCredentialsProvider provideCredentialsProvider() {
-        return DefaultCredentialsProvider.create();
+        return DefaultCredentialsProvider.builder().build();
     }
 }

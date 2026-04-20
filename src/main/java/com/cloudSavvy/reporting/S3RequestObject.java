@@ -14,12 +14,12 @@ public class S3RequestObject {
     private RequestBody requestBody;
     private String contentType;
 
-    public static S3RequestObjectBuilder htmlDataBuilder(String htmlData) {
+    public static S3RequestObject.S3RequestObjectBuilder htmlDataBuilder(String htmlData) {
         return S3RequestObject.builder().contentType(HTML_CONTENT)
                 .requestBody(RequestBody.fromString(htmlData));
     }
 
-    public static S3RequestObjectBuilder jsonDataBuilder(String jsonData) {
+    public static S3RequestObject.S3RequestObjectBuilder jsonDataBuilder(String jsonData) {
         return S3RequestObject.builder().contentType(JSON_CONTENT)
                 .requestBody(RequestBody.fromString(jsonData));
     }

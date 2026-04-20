@@ -4,11 +4,10 @@ import com.cloudSavvy.common.RegionAnalyzeResult;
 import com.cloudSavvy.common.internal.ExRegionRunResult;
 import com.cloudSavvy.common.internal.ExecutionInternalData;
 import com.cloudSavvy.reporting.ReportType;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.utils.CollectionUtils;
+import tools.jackson.databind.ObjectMapper;
 
 @AllArgsConstructor
 @Slf4j
@@ -29,7 +28,7 @@ public class InternalDataJsonReport implements ReportBuilder {
         String report = "";
         try {
             report = objectMapper.writeValueAsString(internalData);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             log.error("Creating internal data failed", e);
         }
 

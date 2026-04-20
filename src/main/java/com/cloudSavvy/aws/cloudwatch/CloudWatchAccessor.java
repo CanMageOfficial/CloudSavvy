@@ -102,6 +102,14 @@ public class CloudWatchAccessor {
         return getMetricData(AWSMetric.MEMORY_DB_CLUSTER_NEW_CONNECTIONS, cacheClusterIds, null);
     }
 
+    public Map<String, MetricDataResult> getSqsNumberOfMessagesSentMetricData(List<String> queueNames) {
+        return getMetricData(AWSMetric.SQS_NUMBER_OF_MESSAGES_SENT, queueNames, null);
+    }
+
+    public Map<String, MetricDataResult> getStepFunctionsExecutionsFailedMetricData(List<String> stateMachineArns) {
+        return getMetricData(AWSMetric.STEP_FUNCTIONS_EXECUTIONS_FAILED, stateMachineArns, null);
+    }
+
     public Map<String, MetricDataResult> getElastiCacheClusterNewConnectionsMetricData(List<String> cacheClusterIds) {
         return getMetricData(AWSMetric.ELASTICACHE_CLUSTER_NEW_CONNECTIONS, cacheClusterIds, null);
     }

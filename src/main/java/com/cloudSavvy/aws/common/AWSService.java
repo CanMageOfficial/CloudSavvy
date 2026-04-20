@@ -26,7 +26,13 @@ public enum AWSService {
     ECS("Elastic Container Service"),
     SECRETS_MANAGER("Secrets Manager"),
     API_GATEWAY("Amazon API Gateway"),
-    MEMORY_DB("Amazon MemoryDB for Redis");
+    MEMORY_DB("Amazon MemoryDB for Redis"),
+    SNS("Amazon SNS"),
+    SQS("Amazon SQS"),
+    ECR("Amazon ECR"),
+    CloudFormation("AWS CloudFormation"),
+    ACM("AWS Certificate Manager"),
+    StepFunctions("AWS Step Functions");
 
     private final String text;
 

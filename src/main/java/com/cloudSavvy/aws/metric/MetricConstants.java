@@ -67,6 +67,10 @@ public class MetricConstants {
     public static final String BILLING_NAMESPACE = "AWS/Billing";
     public static final String ESTIMATED_CHARGES = "EstimatedCharges";
     public static final String MEMORY_DB_NAMESPACE = "AWS/MemoryDB";
+    public static final String SQS_NAMESPACE = "AWS/SQS";
+    public static final String NUMBER_OF_MESSAGES_SENT = "NumberOfMessagesSent";
+    public static final String STEP_FUNCTIONS_NAMESPACE = "AWS/States";
+    public static final String EXECUTIONS_FAILED = "ExecutionsFailed";
 
     public static final ImmutableMap<AWSMetric, MetricTrait> AWSMetricTraits = ImmutableMap.<AWSMetric, MetricTrait>builder()
             .put(AWSMetric.LAMBDA_INVOCATIONS, MetricTrait.builder()
@@ -203,6 +207,16 @@ public class MetricConstants {
                     .namespace(MEMORY_DB_NAMESPACE)
                     .metricName(NEW_CONNECTIONS)
                     .dimensionName("ClusterName")
+                    .unit(StandardUnit.COUNT).statistic(Statistic.SUM).build())
+            .put(AWSMetric.SQS_NUMBER_OF_MESSAGES_SENT, MetricTrait.builder()
+                    .namespace(SQS_NAMESPACE)
+                    .metricName(NUMBER_OF_MESSAGES_SENT)
+                    .dimensionName("QueueName")
+                    .unit(StandardUnit.COUNT).statistic(Statistic.SUM).build())
+            .put(AWSMetric.STEP_FUNCTIONS_EXECUTIONS_FAILED, MetricTrait.builder()
+                    .namespace(STEP_FUNCTIONS_NAMESPACE)
+                    .metricName(EXECUTIONS_FAILED)
+                    .dimensionName("StateMachineArn")
                     .unit(StandardUnit.COUNT).statistic(Statistic.SUM).build())
             .build();
 }

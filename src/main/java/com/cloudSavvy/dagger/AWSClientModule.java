@@ -36,7 +36,13 @@ import software.amazon.awssdk.services.redshiftserverless.RedshiftServerlessClie
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sagemaker.SageMakerAsyncClient;
 import software.amazon.awssdk.services.sagemaker.SageMakerClient;
+import software.amazon.awssdk.services.acm.AcmClient;
+import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
+import software.amazon.awssdk.services.ecr.EcrClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
+import software.amazon.awssdk.services.sfn.SfnClient;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.transfer.TransferClient;
 
 import javax.inject.Singleton;
@@ -359,6 +365,66 @@ public class AWSClientModule {
     public MemoryDbClient provideMemoryDbClient(final AwsCredentialsProvider credentialsProvider,
                                                 final Region region) {
         return MemoryDbClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public SnsClient provideSnsClient(final AwsCredentialsProvider credentialsProvider,
+                                      final Region region) {
+        return SnsClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public SqsClient provideSqsClient(final AwsCredentialsProvider credentialsProvider,
+                                      final Region region) {
+        return SqsClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public EcrClient provideEcrClient(final AwsCredentialsProvider credentialsProvider,
+                                      final Region region) {
+        return EcrClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public CloudFormationClient provideCloudFormationClient(final AwsCredentialsProvider credentialsProvider,
+                                                            final Region region) {
+        return CloudFormationClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public AcmClient provideAcmClient(final AwsCredentialsProvider credentialsProvider,
+                                      final Region region) {
+        return AcmClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    public SfnClient provideSfnClient(final AwsCredentialsProvider credentialsProvider,
+                                      final Region region) {
+        return SfnClient.builder()
                 .credentialsProvider(credentialsProvider)
                 .region(region)
                 .build();

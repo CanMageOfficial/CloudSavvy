@@ -31,11 +31,23 @@ import com.cloudSavvy.aws.apigateway.ApiGatewayAccessor;
 import com.cloudSavvy.aws.efs.EFSAccessor;
 import com.cloudSavvy.aws.lightsail.LightsailAccessor;
 import com.cloudSavvy.aws.memorydb.MemoryDbAccessor;
+import com.cloudSavvy.aws.acm.AcmAccessor;
+import com.cloudSavvy.aws.cloudformation.CloudFormationAccessor;
+import com.cloudSavvy.aws.ecr.EcrAccessor;
 import com.cloudSavvy.aws.secretsmanager.SecretsManagerAccessor;
+import com.cloudSavvy.aws.sns.SnsAccessor;
+import com.cloudSavvy.aws.sqs.SqsAccessor;
+import com.cloudSavvy.aws.stepfunctions.StepFunctionsAccessor;
 import dagger.Module;
 import dagger.Provides;
+import software.amazon.awssdk.services.acm.AcmClient;
 import software.amazon.awssdk.services.apigateway.ApiGatewayClient;
 import software.amazon.awssdk.services.apigatewayv2.ApiGatewayV2Client;
+import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
+import software.amazon.awssdk.services.ecr.EcrClient;
+import software.amazon.awssdk.services.sfn.SfnClient;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.applicationautoscaling.ApplicationAutoScalingClient;
 import software.amazon.awssdk.services.appstream.AppStreamClient;
 import software.amazon.awssdk.services.cloudfront.CloudFrontClient;
@@ -246,5 +258,41 @@ public class AWSAccessorModule {
     @Singleton
     public MemoryDbAccessor provideMemoryDbAccessor(final MemoryDbClient memoryDbClient) {
         return new MemoryDbAccessor(memoryDbClient);
+    }
+
+    @Provides
+    @Singleton
+    public SnsAccessor provideSnsAccessor(final SnsClient snsClient) {
+        return new SnsAccessor(snsClient);
+    }
+
+    @Provides
+    @Singleton
+    public SqsAccessor provideSqsAccessor(final SqsClient sqsClient) {
+        return new SqsAccessor(sqsClient);
+    }
+
+    @Provides
+    @Singleton
+    public EcrAccessor provideEcrAccessor(final EcrClient ecrClient) {
+        return new EcrAccessor(ecrClient);
+    }
+
+    @Provides
+    @Singleton
+    public CloudFormationAccessor provideCloudFormationAccessor(final CloudFormationClient cloudFormationClient) {
+        return new CloudFormationAccessor(cloudFormationClient);
+    }
+
+    @Provides
+    @Singleton
+    public AcmAccessor provideAcmAccessor(final AcmClient acmClient) {
+        return new AcmAccessor(acmClient);
+    }
+
+    @Provides
+    @Singleton
+    public StepFunctionsAccessor provideStepFunctionsAccessor(final SfnClient sfnClient) {
+        return new StepFunctionsAccessor(sfnClient);
     }
 }

@@ -87,8 +87,20 @@ import com.cloudSavvy.aws.lightsail.LightsailStaticIPRule;
 import com.cloudSavvy.aws.memorydb.MemoryDbAccessor;
 import com.cloudSavvy.aws.memorydb.MemoryDbClusterRule;
 import com.cloudSavvy.aws.redshift.RedshiftRuleManager;
+import com.cloudSavvy.aws.acm.AcmAccessor;
+import com.cloudSavvy.aws.acm.AcmCertificateRule;
+import com.cloudSavvy.aws.cloudformation.CloudFormationAccessor;
+import com.cloudSavvy.aws.cloudformation.CloudFormationStackRule;
+import com.cloudSavvy.aws.ecr.EcrAccessor;
+import com.cloudSavvy.aws.ecr.EcrRepositoryRule;
 import com.cloudSavvy.aws.secretsmanager.SecretsManagerAccessor;
 import com.cloudSavvy.aws.secretsmanager.SecretsManagerUsageRule;
+import com.cloudSavvy.aws.sns.SnsAccessor;
+import com.cloudSavvy.aws.sns.SnsTopicRule;
+import com.cloudSavvy.aws.sqs.SqsAccessor;
+import com.cloudSavvy.aws.sqs.SqsQueueRule;
+import com.cloudSavvy.aws.stepfunctions.StepFunctionsAccessor;
+import com.cloudSavvy.aws.stepfunctions.StepFunctionsStateMachineRule;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoMap;
@@ -129,6 +141,12 @@ public class AWSAnalyzerModule {
     private static final String SECRETS_MANAGER_RULES = "SECRETS_MANAGER_RULES";
     private static final String API_GATEWAY_RULES = "API_GATEWAY_RULES";
     private static final String MEMORY_DB_RULES = "MEMORY_DB_RULES";
+    private static final String SNS_RULES = "SNS_RULES";
+    private static final String SQS_RULES = "SQS_RULES";
+    private static final String ECR_RULES = "ECR_RULES";
+    private static final String CLOUDFORMATION_RULES = "CLOUDFORMATION_RULES";
+    private static final String ACM_RULES = "ACM_RULES";
+    private static final String STEP_FUNCTIONS_RULES = "STEP_FUNCTIONS_RULES";
 
     @Provides
     @Singleton
@@ -666,6 +684,110 @@ public class AWSAnalyzerModule {
                                                            final CloudWatchAccessor cloudWatchAccessor) {
         List<AnalyzerRule> rules = new ArrayList<>();
         rules.add(new MemoryDbClusterRule(memoryDbAccessor, cloudWatchAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideSnsAnalyzer(final @Named(SNS_RULES) List<AnalyzerRule> rules,
+                                          final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.SNS);
+    }
+
+    @Provides
+    @Singleton
+    @Named(SNS_RULES)
+    public List<AnalyzerRule> provideSnsAnalyzerRules(final SnsAccessor snsAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new SnsTopicRule(snsAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideSqsAnalyzer(final @Named(SQS_RULES) List<AnalyzerRule> rules,
+                                          final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.SQS);
+    }
+
+    @Provides
+    @Singleton
+    @Named(SQS_RULES)
+    public List<AnalyzerRule> provideSqsAnalyzerRules(final SqsAccessor sqsAccessor,
+                                                      final CloudWatchAccessor cloudWatchAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new SqsQueueRule(sqsAccessor, cloudWatchAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideEcrAnalyzer(final @Named(ECR_RULES) List<AnalyzerRule> rules,
+                                          final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.ECR);
+    }
+
+    @Provides
+    @Singleton
+    @Named(ECR_RULES)
+    public List<AnalyzerRule> provideEcrAnalyzerRules(final EcrAccessor ecrAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new EcrRepositoryRule(ecrAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideCloudFormationAnalyzer(final @Named(CLOUDFORMATION_RULES) List<AnalyzerRule> rules,
+                                                     final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.CloudFormation);
+    }
+
+    @Provides
+    @Singleton
+    @Named(CLOUDFORMATION_RULES)
+    public List<AnalyzerRule> provideCloudFormationAnalyzerRules(final CloudFormationAccessor cloudFormationAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new CloudFormationStackRule(cloudFormationAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideAcmAnalyzer(final @Named(ACM_RULES) List<AnalyzerRule> rules,
+                                          final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.ACM);
+    }
+
+    @Provides
+    @Singleton
+    @Named(ACM_RULES)
+    public List<AnalyzerRule> provideAcmAnalyzerRules(final AcmAccessor acmAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new AcmCertificateRule(acmAccessor));
+        return rules;
+    }
+
+    @Provides
+    @Singleton
+    @IntoSet
+    public AWSAnalyzer provideStepFunctionsAnalyzer(final @Named(STEP_FUNCTIONS_RULES) List<AnalyzerRule> rules,
+                                                    final RunContext runContext) {
+        return new AWSAnalyzer(rules, runContext, AWSService.StepFunctions);
+    }
+
+    @Provides
+    @Singleton
+    @Named(STEP_FUNCTIONS_RULES)
+    public List<AnalyzerRule> provideStepFunctionsAnalyzerRules(final StepFunctionsAccessor stepFunctionsAccessor,
+                                                                final CloudWatchAccessor cloudWatchAccessor) {
+        List<AnalyzerRule> rules = new ArrayList<>();
+        rules.add(new StepFunctionsStateMachineRule(stepFunctionsAccessor, cloudWatchAccessor));
         return rules;
     }
 }

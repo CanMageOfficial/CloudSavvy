@@ -91,7 +91,19 @@ public enum IssueCode {
     PROVISIONED_KINESIS_DATA_STREAM_HAS_LOW_USAGE("Provisioned Kinesis Data Stream Has Low Usage"),
     S3_DEVELOPMENT_BUCKET_HAS_NO_LIFECYCLE_CONFIG("Development S3 Bucket Has No Lifecycle Configuration"),
     SERVICE_COST_HAS_SPIKE("Service cost has sudden increase.", IssueSeverity.HIGH),
-    LAMBDA_RUNTIME_DEPRECATED("Lambda function runtime is deprecated", IssueSeverity.MEDIUM);
+    LAMBDA_RUNTIME_DEPRECATED("Lambda function runtime is deprecated", IssueSeverity.MEDIUM),
+    SNS_TOPIC_HAS_NO_SUBSCRIPTIONS("SNS Topic Has No Confirmed Subscriptions"),
+    SQS_QUEUE_HAS_MESSAGES_IN_DLQ("SQS Dead Letter Queue Has Messages", IssueSeverity.HIGH),
+    SQS_QUEUE_HAS_STUCK_MESSAGES("SQS Queue Has Messages But No Consumers", IssueSeverity.HIGH),
+    ECR_REPOSITORY_NOT_USED("ECR Repository Has Not Been Pushed To Recently", IssueSeverity.LOW),
+    CLOUDFORMATION_STACK_IN_FAILED_STATE("CloudFormation Stack Is In Failed State", IssueSeverity.HIGH),
+    CLOUDFORMATION_STACK_IN_ROLLBACK_COMPLETE("CloudFormation Stack Is In Rollback Complete State"),
+    ACM_CERTIFICATE_EXPIRING_SOON("ACM Certificate Is Expiring Within 30 Days", IssueSeverity.HIGH),
+    ACM_CERTIFICATE_UNUSED("ACM Certificate Is Not In Use", IssueSeverity.LOW),
+    STEP_FUNCTIONS_STATE_MACHINE_HAS_FAILURES("Step Functions State Machine Has Execution Failures", IssueSeverity.HIGH),
+    EBS_VOLUME_GP2_CAN_MIGRATE_TO_GP3("EBS Volume Is Using GP2, Consider Migrating To GP3", IssueSeverity.LOW),
+    SAGEMAKER_STUDIO_APP_RUNNING_IDLE("SageMaker Studio App Is Running But Not Used", IssueSeverity.HIGH),
+    BEDROCK_PROVISIONED_THROUGHPUT_NOT_USED("Bedrock Provisioned Throughput Is Not Used", IssueSeverity.HIGH);
 
     private final String text;
     @Getter

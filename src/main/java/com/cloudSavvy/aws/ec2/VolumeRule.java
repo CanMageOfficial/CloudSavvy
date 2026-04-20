@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.ec2.model.Volume;
 import software.amazon.awssdk.services.ec2.model.VolumeState;
 import software.amazon.awssdk.services.ec2.model.VolumeStatusInfoStatus;
 import software.amazon.awssdk.services.ec2.model.VolumeStatusItem;
+import software.amazon.awssdk.services.ec2.model.VolumeType;
 import software.amazon.awssdk.utils.CollectionUtils;
 
 import java.util.List;
@@ -60,6 +61,11 @@ public class VolumeRule implements AnalyzerRule {
                     ruleResult.addIssueData(new IssueData(entityType,
                             volume.volumeId(), IssueCode.EBS_VOLUME_STATUS_IMPAIRED));
                 }
+            }
+
+            if (volume.volumeType() == VolumeType.GP2) {
+                ruleResult.addIssueData(new IssueData(entityType,
+                        volume.volumeId(), IssueCode.EBS_VOLUME_GP2_CAN_MIGRATE_TO_GP3));
             }
         }
 

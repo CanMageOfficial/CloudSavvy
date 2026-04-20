@@ -48,6 +48,12 @@ public enum EntityType {
     APIGateway_METHOD("API Gateway Method"),
     APIGateway_API("API Gateway Api"),
     MEMORY_DB_CLUSTER("Amazon MemoryDB Cluster"),
+    SNS_TOPIC("SNS Topic"),
+    SQS_QUEUE("SQS Queue"),
+    ECR_REPOSITORY("ECR Repository"),
+    CLOUDFORMATION_STACK("CloudFormation Stack"),
+    ACM_CERTIFICATE("ACM Certificate"),
+    STEP_FUNCTIONS_STATE_MACHINE("Step Functions State Machine"),
 
     BILLING("Billing");
 

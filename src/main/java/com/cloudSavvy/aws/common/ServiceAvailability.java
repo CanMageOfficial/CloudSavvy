@@ -41,10 +41,12 @@ public class ServiceAvailability {
             .put(AWSService.FSx, new HashSet<>(Collections.singletonList(Region.AP_SOUTHEAST_6)))
             .put(AWSService.GLUE, new HashSet<>(Arrays.asList(Region.AP_SOUTHEAST_3, Region.ME_CENTRAL_1,
                     Region.EU_CENTRAL_2, Region.AP_SOUTH_2, Region.EU_SOUTH_2)))
+            .put(AWSService.Bedrock, new HashSet<>(Arrays.asList(Region.AP_EAST_1, Region.AF_SOUTH_1)))
+            .put(AWSService.Amazon_SageMaker, new HashSet<>(Collections.singletonList(Region.AP_SOUTH_2)))
             .build();
 
     // Temporarily disabled regions (e.g. due to connectivity/geopolitical issues)
-    public static final Set<Region> DISABLED_REGIONS = new HashSet<>(Collections.singletonList(Region.ME_SOUTH_1));
+    public static final Set<Region> DISABLED_REGIONS = new HashSet<>(Arrays.asList(Region.ME_SOUTH_1, Region.ME_CENTRAL_1));
 
     public static final boolean IGNORE_AVAILABILITY = EnvironmentUtils.ignoreAvailability();
 

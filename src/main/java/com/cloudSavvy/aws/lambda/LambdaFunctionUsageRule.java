@@ -43,16 +43,23 @@ public class LambdaFunctionUsageRule implements AnalyzerRule {
 
     private static final ImmutableSet<Runtime> ARM64_SUPPORTED_RUNTIMES = ImmutableSet.<Runtime>builder()
             .add(Runtime.NODEJS12_X).add(Runtime.NODEJS14_X).add(Runtime.NODEJS16_X)
-            .add(Runtime.NODEJS18_X).add(Runtime.NODEJS20_X)
-            .add(Runtime.RUBY2_7).add(Runtime.RUBY3_2).add(Runtime.RUBY3_3)
-            .add(Runtime.PYTHON3_8).add(Runtime.PYTHON3_9).add(Runtime.PYTHON3_10).add(Runtime.PYTHON3_12).build();
+            .add(Runtime.NODEJS18_X).add(Runtime.NODEJS20_X).add(Runtime.NODEJS22_X).add(Runtime.NODEJS24_X)
+            .add(Runtime.RUBY2_7).add(Runtime.RUBY3_2).add(Runtime.RUBY3_3).add(Runtime.RUBY3_4)
+            .add(Runtime.PYTHON3_8).add(Runtime.PYTHON3_9).add(Runtime.PYTHON3_10).add(Runtime.PYTHON3_11)
+            .add(Runtime.PYTHON3_12).add(Runtime.PYTHON3_13).add(Runtime.PYTHON3_14).build();
 
     private static final ImmutableSet<Runtime> NODEJS_RUNTIMES = ImmutableSet.<Runtime>builder()
             .add(Runtime.NODEJS12_X).add(Runtime.NODEJS14_X).add(Runtime.NODEJS16_X)
-            .add(Runtime.NODEJS18_X).add(Runtime.NODEJS20_X).build();
+            .add(Runtime.NODEJS18_X).add(Runtime.NODEJS20_X).add(Runtime.NODEJS22_X).add(Runtime.NODEJS24_X).build();
 
     private static final ImmutableSet<Runtime> DEPRECATED_RUNTIMES = ImmutableSet.<Runtime>builder()
-            .add(Runtime.NODEJS16_X).add(Runtime.PYTHON3_8).add(Runtime.DOTNET6).build();
+            .add(Runtime.NODEJS12_X).add(Runtime.NODEJS14_X).add(Runtime.NODEJS16_X)
+            .add(Runtime.NODEJS18_X).add(Runtime.NODEJS20_X)
+            .add(Runtime.PYTHON3_8).add(Runtime.PYTHON3_9)
+            .add(Runtime.RUBY2_7)
+            .add(Runtime.GO1_X)
+            .add(Runtime.DOTNETCORE3_1).add(Runtime.DOTNET6)
+            .add(Runtime.JAVA8).build();
 
     @Override
     public AWSService getAWSService() {

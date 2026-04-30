@@ -113,7 +113,7 @@ public class IssueDataHtmlReport implements ReportBuilder {
                                  final Map<Region, SortedMap<IssueCode, List<IssueData>>> regionToDataMap,
                                  final StringBuilder sb) {
         final List<Map.Entry<Region, SortedMap<IssueCode, List<IssueData>>>> sortedDataList = regionToDataMap.entrySet()
-                .stream().sorted(new IssueCodeDataListComparator()).collect(Collectors.toList());
+                .stream().sorted(new IssueCodeDataListComparator()).toList();
 
         final Map<Object, Set<IssueData>> regionToNewIssueMap = input.getResults().stream()
                 .collect(Collectors.toMap(RegionAnalyzeResult::getRegion, RegionAnalyzeResult::getNewIssues));
@@ -124,7 +124,7 @@ public class IssueDataHtmlReport implements ReportBuilder {
         Map<IssueCode, String> issueCodeLinkTitles = LocalizationReader.getIssueCodeLinkTitles(Locale.US, issueCodes);
 
         for (Map.Entry<Region, SortedMap<IssueCode, List<IssueData>>> entry : sortedDataList) {
-            if (entry.getValue().entrySet().isEmpty()) {
+            if (entry.getValue().isEmpty()) {
                 continue;
             }
 

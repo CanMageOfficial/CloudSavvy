@@ -66,7 +66,7 @@ public class DailyChargesHtmlReport implements ReportBuilder {
         sb.append(HtmlReportUtils.buildHeaderCell("Service Name"));
 
         List<BillingData> sortedBillingDataList =
-                billingDataList.stream().sorted(new BillingDataPriceComparator()).collect(Collectors.toList());
+                billingDataList.stream().sorted(new BillingDataPriceComparator()).toList();
         List<DailyCharge> longestData = sortedBillingDataList.stream().map(BillingData::getDailyCharges)
                 .max(Comparator.comparingInt(List::size)).orElse(new ArrayList<>());
         Collections.reverse(longestData);

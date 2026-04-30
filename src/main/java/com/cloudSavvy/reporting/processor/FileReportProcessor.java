@@ -1,6 +1,5 @@
 package com.cloudSavvy.reporting.processor;
 
-import com.cloudSavvy.localization.LocalizationReader;
 import com.cloudSavvy.reporting.ReportLocationType;
 import com.cloudSavvy.reporting.ReportType;
 import com.cloudSavvy.reporting.builder.ReportResult;
@@ -13,9 +12,7 @@ import software.amazon.awssdk.utils.StringUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,7 +30,6 @@ public class FileReportProcessor implements ReportProcessor {
 
         Map<ReportType, String> fileNames = new ConcurrentHashMap<>();
         Path outputDir = input.getOutputDirectoryPath();
-        ResourceBundle resourceBundle = LocalizationReader.getMessageTexts(Locale.US);
 
         Path resultsDir = outputDir.resolve(input.getOutputFolderName());
         try {
@@ -57,9 +53,6 @@ public class FileReportProcessor implements ReportProcessor {
                 String filePath = finalResultsDir.resolve(fileName).toString();
                 FileUtils.writeToFile(filePath, entry.getValue().getReport());
 
-                if (reportType == ReportType.FULL_ISSUE_DATA_HTML || reportType == ReportType.SERVICE_DATA_HTML) {
-                    log.info("{}: {}", resourceBundle.getString(reportType.name()), filePath);
-                }
                 fileNames.put(reportType, filePath);
             } catch (IOException e) {
                 throw new RuntimeException(e);

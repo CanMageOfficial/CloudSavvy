@@ -25,10 +25,10 @@ resources for running CloudSavvy.
 ## Running From Local Computer
 ### Running From Command line From Local Computer
 ./gradlew run   
-Build system uses gradle.   
+Build system uses Gradle.   
 If no region is provided,
 application detects all regions enabled in the AWS environment. Results are 
-created at Results folder. IntelliJ IDEA Community edition is used for development.
+created at Results folder. IntelliJ IDEA Community Edition is used for development.
 
 ### Running From Command line With Specific Region
 ./gradlew run --args='-r us-east-1'

@@ -32,9 +32,9 @@ public class DailyChargesHtmlReport implements ReportBuilder {
                 results.stream().filter(result -> result.getRegion() == Region.US_EAST_1).findFirst();
 
         StringBuilder sb = new StringBuilder();
-        appendHead(sb);
+        HtmlReportUtils.appendResultHead(sb);
 
-        sb.append("<h3>").append("Estimated Charges").append("</h3>");
+        sb.append("<h2>").append("Estimated Charges").append("</h2>");
 
         if (eastResultOptional.isEmpty()
                 || CollectionUtils.isNullOrEmpty(eastResultOptional.get().getBillingDataList())) {
@@ -60,22 +60,10 @@ public class DailyChargesHtmlReport implements ReportBuilder {
         return ReportType.DAILY_CHARGES_HTML;
     }
 
-    private void appendHead(final StringBuilder sb) {
-        sb.append("<html>");
-        sb.append("<head>");
-        sb.append("<meta charset=\"UTF-8\"/>");
-        sb.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />");
-        sb.append("<style>");
-        sb.append("table, th, td{border: 1px black; border-collapse: collapse;border-style: dotted}");
-        sb.append("th, td{padding: 7px}");
-        sb.append("</style>");
-        sb.append("</head>");
-        sb.append("<body>");
-    }
-
     private void buildChargesTable(List<BillingData> billingDataList, StringBuilder sb) {
-        sb.append("<table>").append("<tr>");
-        sb.append(HtmlReportUtils.buildColumnText("Service Name"));
+        sb.append("<div style=\"overflow-x:auto;-webkit-overflow-scrolling:touch;\">");
+        sb.append("<table style=\"width:auto;min-width:100%;white-space:nowrap;\">").append("<thead><tr>");
+        sb.append(HtmlReportUtils.buildHeaderCell("Service Name"));
 
         List<BillingData> sortedBillingDataList =
                 billingDataList.stream().sorted(new BillingDataPriceComparator()).collect(Collectors.toList());
@@ -83,9 +71,9 @@ public class DailyChargesHtmlReport implements ReportBuilder {
                 .max(Comparator.comparingInt(List::size)).orElse(new ArrayList<>());
         Collections.reverse(longestData);
         for (DailyCharge dailyCharge : longestData) {
-            sb.append(HtmlReportUtils.buildColumnText(TimeUtils.DAY_FORMATTER.format(Date.from(dailyCharge.getDate()))));
+            sb.append(HtmlReportUtils.buildHeaderCell(TimeUtils.DAY_FORMATTER.format(Date.from(dailyCharge.getDate()))));
         }
-        sb.append("</tr>");
+        sb.append("</tr></thead><tbody>");
         for (BillingData billingData : sortedBillingDataList) {
             sb.append("<tr>").append(HtmlReportUtils.buildColumnText(billingData.getServiceName()));
             for (int i = billingData.getDailyCharges().size() - 1; i >= 0; i--) {
@@ -95,6 +83,6 @@ public class DailyChargesHtmlReport implements ReportBuilder {
             sb.append("</tr>");
         }
 
-        sb.append("</table>");
+        sb.append("</tbody></table></div>");
     }
 }

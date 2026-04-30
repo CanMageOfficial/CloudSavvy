@@ -144,7 +144,7 @@ public class IssueDataHtmlReport implements ReportBuilder {
                     sb.append("<p class=\"issueDetails\">Details: ").append(issueCodeLink).append("</p>");
                 }
                 sb.append("<p class=\"issueDetails\">").append("Cost Impact: ")
-                        .append(issueCode.getIssueSeverity()).append("</p>");
+                        .append(HtmlReportUtils.buildSeverityBadge(issueCode.getIssueSeverity())).append("</p>");
                 sb.append("<p class=\"issueDetails\">").append("Resources:").append("</p>");
 
                 sb.append("<ul>");
@@ -166,7 +166,7 @@ public class IssueDataHtmlReport implements ReportBuilder {
         for (IssueData issueData : issueDataEntry.getValue()) {
             if (newIssues.contains(issueData)) {
                 sb.append("<li>").append(HtmlReportUtils.buildResourceRow(region, issueData))
-                        .append("<span style=\"color: red\"> NEW</span>").append("</li>");
+                        .append("<span class=\"new-badge\">NEW</span>").append("</li>");
                 count++;
             }
         }

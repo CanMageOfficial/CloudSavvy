@@ -11,6 +11,14 @@ Parameters:
   LambdaBucket:
     Type: String
     Description: S3 bucket where lambda zip file is stored.
+  CreateSnsTopic:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: Whether to create an SNS notification topic.
+
+Conditions:
+  IsSnsTopicEnabled: !Equals [!Ref CreateSnsTopic, "true"]
 
 Resources:
   # S3 bucket will be used to store reports
@@ -31,8 +39,9 @@ Resources:
 
   CloudSavvyNotificationTopic:
     Type: 'AWS::SNS::Topic'
+    Condition: IsSnsTopicEnabled
     Properties:
-      TopicName : "CloudSavvyNotificationTopic"
+      TopicName: "CloudSavvyNotificationTopic"
 
   # Lambda function
   CloudSavvyExecutorFunction:
@@ -61,7 +70,7 @@ Resources:
           TO_EMAIL_ADDRESSES: !Ref EmailAddress
           RUNNING_AWS_ACCOUNT_ID: !Ref AWS::AccountId
           STACK_NAME: !Ref AWS::StackName
-          NOTIFICATION_TOPIC_ARN: !Ref CloudSavvyNotificationTopic
+          NOTIFICATION_TOPIC_ARN: !If [IsSnsTopicEnabled, !Ref CloudSavvyNotificationTopic, ""]
       Role:
         Fn::GetAtt: [ CloudSavvyExecutorFunctionRole, Arn ]
       Tracing: Active
@@ -106,9 +115,12 @@ Resources:
                     - ":"
                     - !Ref AWS::AccountId
                     - ":identity/*"
-              - Effect: Allow
-                Action: 'sns:Publish'
-                Resource: !Ref CloudSavvyNotificationTopic
+              - !If
+                - IsSnsTopicEnabled
+                - Effect: Allow
+                  Action: 'sns:Publish'
+                  Resource: !Ref CloudSavvyNotificationTopic
+                - !Ref AWS::NoValue
               - Effect: Allow
                 Action:
                   - memorydb:DescribeClusters

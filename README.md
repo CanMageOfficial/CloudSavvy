@@ -6,6 +6,7 @@
     * [Running From Command line With AWS Profile](#running-from-command-line-with-aws-profile)
   * [Deploying to AWS](#deploying-to-aws)
     * [Deploying to Personal AWS Account](#deploying-to-personal-aws-account)
+    * [Deploying to Multiple Environments](#deploying-to-multiple-environments)
   * [Sample Report](#sample-report)
   * [Development](#development)
     * [Setting Up Development Environment](#setting-up-development-environment)
@@ -49,6 +50,32 @@ AWS_PROFILE=`Profile Name` ./gradlew run
 
 CloudSavvyExecutorFunction lambda function will be deployed to your default region
 CloudSavvyExecutorFunction will be scheduled to run daily
+
+### Deploying to Multiple Environments
+Environment-specific configuration is stored in `.env.<name>` files (e.g. `.env.dev`, `.env.prod`).
+These files are gitignored and never committed. See `.env.example` for the required variables.
+
+**First-time setup for an environment:**
+```bash
+bash 1-create-bucket.sh dev        # creates the S3 bucket and writes .env.dev
+# open .env.dev and set EMAIL_ADDRESS
+bash 2-deploy.sh dev
+```
+
+**Subsequent deploys:**
+```bash
+bash 2-deploy.sh dev
+bash 2-deploy.sh prod
+```
+
+Each `.env.<name>` file contains:
+```
+BUCKET_NAME=lambda-artifacts-...
+AWS_PROFILE=my-aws-profile
+AWS_REGION=us-east-1
+EMAIL_ADDRESS=you@example.com
+CREATE_SNS_TOPIC=false        # set to true to create an SNS notification topic
+```
 
 ## Sample Report
 
